@@ -24,3 +24,14 @@ const immediate2 = setImmediate(() => {
 });
 
 clearImmediate(immediate2);
+
+let i = 0;
+const printNum = setInterval(() => {
+  if (i === 5) {
+    console.log("끝!");
+    clearInterval(printNum);
+  } else {
+    i += 1;
+    console.log(i);
+  }
+}, 1000);
