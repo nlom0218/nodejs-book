@@ -46,8 +46,8 @@ console.log(myURL2.searchParams.getAll("filter"));
 // toString(): 조작한 searchParams 객체를 다시 문자열로 만듬. 이 문자열을 search에 대입하면 주소 객체에 반영
 console.log("myURL2.searchParams.toString():", myURL2.searchParams.toString());
 
-// 기존 노드의 url을 사용할 때, search 부분을 사용하기 쉽게 객체로 만드는 방법
-const querystring = require("querystring");
+//기존 노드의 url을 사용할 때, search 부분을 사용하기 쉽게 객체로 만드는 방법
+const qs = require("querystring");
 const parsedUrl2 = url.parse(adress2);
 // querystring.parse(쿼리): url의 query부분을 자바스크립 객체로 분해
 const query = querystring.parse(parsedUrl2.query);
