@@ -2,6 +2,10 @@ const express = require("express");
 const path = require("path");
 const morgan = require("morgan");
 const cookieParser = require("cookie-parser");
+const session = require("express-session");
+const dotenv = require("dotenv");
+
+dotenv.config();
 
 const app = express();
 app.set("port", process.env.PORT || 3000);
@@ -9,9 +13,22 @@ app.set("port", process.env.PORT || 3000);
 // 그렇지 않으면 3000번 포트를 이용
 
 app.use(morgan("dev")); // 요청과 응답에 대한 정보를 콘솔에 기록
+app.use("/image", express.static(path.join(__dirname, "public")));
 app.use(express.json()); // JSON 형식의 데이터 전달
 app.use(express.urlencoded({ extended: true })); // 주소 형식으로 데이터 보내는 방식
-app.use(cookieParser());
+app.use(cookieParser(process.env.COOKIE_SECRET));
+app.use(
+  session({
+    resave: false,
+    saveUninitialized: false,
+    secret: process.env.COOKIE_SECRET,
+    cookie: {
+      httpOnly: true,
+      secure: false,
+    },
+    name: "session-cookie",
+  })
+);
 
 app.use(
   (req, res, next) => {
@@ -24,18 +41,20 @@ app.use(
 );
 
 app.get("/", (req, res) => {
-  res.cookie("name", "KHD", {
+  req.session.name = "KHD";
+  res.cookie("name", "KHDddd", {
     // 쿠키생성
     maxAge: 30000,
     httpOnly: true,
     path: "/",
   });
-  res.clearCookie("name", "zerocho", {
-    // 쿠키제거
-    httpOnly: true,
-    path: "/",
-  });
+  // res.clearCookie("name", "zerocho", {
+  //   // 쿠키제거
+  //   httpOnly: true,
+  //   path: "/",
+  // });
   console.log("Cookies:", req.cookies);
+  console.log("singendCookies:", req.signedCookies);
   res.sendFile(path.join(__dirname, "index.html"));
   // res.send, res.sendFile, res.json, res.render는 한 라우터 안에서 한 번만 사용하기(미들웨어 포함)
   // 그렇지 않으면 Error: Cannot set header after they are sent to the client 발생
