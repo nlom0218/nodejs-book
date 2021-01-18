@@ -16,7 +16,6 @@ module.exports = () => {
             where: { snsId: profile.id, provider: "kakao" },
           });
           if (exUser) {
-            console.log(profile);
             done(null, exUser);
           } else {
             const newUser = await User.create({

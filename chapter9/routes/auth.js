@@ -56,7 +56,6 @@ router.get("/logout", isLoggedIn, (req, res) => {
 });
 
 // 카카오 로그인
-
 router.get("/kakao", passport.authenticate("kakao")); // 카카오 로그인 창으로 리다이렉트
 router.get(
   "/kakao/callback",
