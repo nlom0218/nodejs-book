@@ -1,20 +1,15 @@
 import express from "express";
+import { isLoggedIn, isNotLoggedIn, localMiddleware } from "../middlewares";
 
 // controllers
 import { home, join, profile } from "../controlloers/pageController";
 
 const pageRouter = express.Router();
 
-pageRouter.use((req, res, next) => {
-  res.locals.user = null;
-  res.locals.followerCount = 0;
-  res.locals.followingCount = 0;
-  res.locals.followerIdList = [];
-  next();
-});
+pageRouter.use(localMiddleware);
 
 pageRouter.get("/", home);
-pageRouter.get("/profile", profile);
-pageRouter.get("/join", join);
+pageRouter.get("/profile", isLoggedIn, profile);
+pageRouter.get("/join", isNotLoggedIn, join);
 
 export default pageRouter;

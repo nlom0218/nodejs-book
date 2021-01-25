@@ -7,14 +7,22 @@ import morgan from "morgan";
 import nunjucks from "nunjucks";
 import cookieParser from "cookie-parser";
 import session from "express-session";
+import passport from "passport";
 
 // router 불러오기
 import pageRouter from "./routers/pageRouter";
+import authRouter from "./routers/authRouter";
 
 // sequelize 불러오기
 import { sequelize } from "./models/index";
 
+// passport 설정 불러오기
+import passportConfig from "./passport";
+
 const app = express();
+
+// passport 설정
+passportConfig();
 
 // 템플린 엔지 설정하기
 app.set("view engine", "html");
@@ -46,8 +54,11 @@ app.use(
     },
   })
 );
+app.use(passport.initialize());
+app.use(passport.session());
 
 // routes
 app.use("/", pageRouter);
+app.use("/auth", authRouter);
 
 app.listen("3000", () => console.log("✅Listening on : http://localhost:3000"));
