@@ -12,6 +12,8 @@ import passport from "passport";
 // router 불러오기
 import pageRouter from "./routers/pageRouter";
 import authRouter from "./routers/authRouter";
+import postRouter from "./routers/postRouter";
+import userRouter from "./routers/userRouter";
 
 // sequelize 불러오기
 import { sequelize } from "./models/index";
@@ -40,6 +42,7 @@ sequelize
 // middlewares
 app.use(morgan("dev"));
 app.use(express.static(path.join(__dirname, "public")));
+app.use("/img", express.static(path.join(__dirname, "uploads")));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser(process.env.COOKIE_SECRET));
@@ -60,5 +63,7 @@ app.use(passport.session());
 // routes
 app.use("/", pageRouter);
 app.use("/auth", authRouter);
+app.use("/post", postRouter);
+app.use("/user", userRouter);
 
-app.listen("3000", () => console.log("✅Listening on : http://localhost:3000"));
+app.listen("8001", () => console.log("✅Listening on : http://localhost:8001"));

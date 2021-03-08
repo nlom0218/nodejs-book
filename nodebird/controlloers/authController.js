@@ -3,7 +3,9 @@ import bcrypt from "bcrypt";
 import passport from "passport";
 
 export const postJoin = async (req, res, next) => {
-  console.log(email, nick, password);
+  const {
+    body: { email, nick, password },
+  } = req;
   try {
     const exUser = await User.findOne({ where: { email } });
     if (exUser) {
